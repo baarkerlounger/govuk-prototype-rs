@@ -1,4 +1,5 @@
-use crate::models::user::{Filters, USERS};
+use crate::data::users::USERS;
+use crate::models::user::Filters;
 
 use rocket::form::Form;
 use rocket::Route;
