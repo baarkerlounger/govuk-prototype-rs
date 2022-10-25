@@ -1,64 +1,12 @@
 #[macro_use]
 extern crate rocket;
 
-use lazy_static::lazy_static;
-use rocket::form::Form;
+mod models;
+mod routes;
+
 use rocket::fs::{relative, FileServer};
-use rocket::serde::Serialize;
 use rocket::Request;
 use rocket_dyn_templates::{context, Template};
-use std::collections::HashMap;
-
-#[derive(FromForm)]
-struct Filters {
-    age: u8,
-}
-
-#[derive(Debug, Serialize)]
-struct User {
-    uuid: String,
-    name: String,
-    age: u8,
-    grade: u8,
-    active: bool,
-}
-
-lazy_static! {
-    static ref USERS: HashMap<&'static str, User> = {
-        let mut map = HashMap::new();
-        map.insert(
-            "3e2dd4ae-3c37-40c6-aa64-7061f284ce28",
-            User {
-                uuid: String::from("3e2dd4ae-3c37-40c6-aa64-7061f284ce28"),
-                name: String::from("John Doe"),
-                age: 18,
-                grade: 1,
-                active: true,
-            },
-        );
-        map
-    };
-}
-
-#[route(GET, uri = "/user/<uuid>", rank = 1, format = "text/html")]
-fn user(uuid: &str) -> Template {
-    let user = USERS.get(uuid);
-    match user {
-        Some(u) => Template::render("users", context! { user: &u }),
-        None => Template::render("404", context! {}),
-    }
-}
-
-#[post("/post", data = "<data>")]
-fn post(data: Form<Filters>) -> &'static str {
-    println!("{:?}", data.age);
-    "Post Request"
-}
-
-#[get("/")]
-fn start_page() -> Template {
-    Template::render("start_page", context! {})
-}
 
 #[catch(404)]
 fn not_found(_req: &Request) -> Template {
@@ -71,7 +19,7 @@ fn rocket() -> _ {
         .attach(Template::fairing())
         .register("/", catchers![not_found])
         .mount("/assets", FileServer::from(relative!("assets")))
-        .mount("/", routes![start_page, user, post])
+        .mount("/", routes::routes())
 }
 
 #[cfg(test)]
