@@ -33,7 +33,14 @@ cargo run
 cargo test
 ```
 
-# Docker
+## Docker
+
+Rust + Docker still feels a little rough around the edges. This uses [cargo chef](https://github.com/LukeMathWalker/cargo-chef) to build rust dependencies separately from compiling our own source code so we can cache that layer.
+
+The final image is built without the rust and node toolchains so we need to copy the compiled and copied front end assets and templates (which are statically linked by cargo) into the image as well as the rust binary.
+
+The final image comes in at 96.7MB.
+
 ```bash
 docker build -t govuk-prototype-rs .
 docker run -p 8000:8000 --rm --name govuk-prototype-rs-1 govuk-prototype-rs
