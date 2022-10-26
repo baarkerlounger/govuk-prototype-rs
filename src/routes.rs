@@ -7,7 +7,12 @@ use rocket::{get, post};
 use rocket_dyn_templates::{context, Template};
 
 pub fn routes() -> Vec<Route> {
-    routes![start_page, user, post]
+    routes![health, start_page, user, post]
+}
+
+#[get("/health")]
+fn health() -> &'static str {
+    "ok"
 }
 
 #[get("/")]

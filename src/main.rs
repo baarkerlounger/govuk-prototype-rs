@@ -30,12 +30,24 @@ mod test {
     use rocket::local::blocking::Client;
 
     #[test]
+    fn health() {
+        let client = Client::tracked(rocket()).unwrap();
+        let req = client.get("/health");
+        let response = req.dispatch();
+        let expected_content = "ok";
+        assert_eq!(response.status(), Status::Ok);
+        assert_eq!(
+            response.into_string().unwrap().contains(expected_content),
+            true
+        );
+    }
+
+    #[test]
     fn start_page() {
         let client = Client::tracked(rocket()).unwrap();
         let req = client.get("/");
         let response = req.dispatch();
-        let expected_content =
-            "This kit lets you rapidly create HTML prototypes of GOV.UK services.";
+        let expected_content = "Gov UK Design System Prototyping in Rust";
         assert_eq!(response.status(), Status::Ok);
         assert_eq!(
             response.into_string().unwrap().contains(expected_content),
