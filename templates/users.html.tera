@@ -3,7 +3,11 @@
 {% block title %}Users{% endblock title %}
 
 {% block content %}
-  <h1> Users </h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Users</h1>
 
-  <p>User name is: {{user.name}}, and their age is: {{user.age}}</p>
+      <p class="govuk-body">User name is: {{user.name}}, and their age is: {{user.age}}</p>
+    </div>
+  </div>
 {% endblock content %}

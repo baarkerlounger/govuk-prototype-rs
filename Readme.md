@@ -1,4 +1,6 @@
-# Govuk-prototype-rs
+# Govuk Prototype Rust
+
+Deployed at https://govuk-prototype-rs.onrender.com/ with Docker.
 
 A small experiment to see how difficult it would be to start building web services using the [GovUK Design System](https://frontend.design-system.service.gov.uk/) in Rust.
 
