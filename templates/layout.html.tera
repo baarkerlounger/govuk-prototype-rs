@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-  <html>
+  <html lang="en" class="govuk-template">
     <head>
       <title>{% block title %}{% endblock title %}</title>
       <script src="/assets/builds/scripts/application.js"></script>
