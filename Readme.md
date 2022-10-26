@@ -32,3 +32,9 @@ cargo run
 ```bash
 cargo test
 ```
+
+# Docker
+```bash
+docker build -t govuk-prototype-rs .
+docker run -p 8000:8000 --rm --name govuk-prototype-rs-1 govuk-prototype-rs
+```
