@@ -8,12 +8,14 @@ What's really missing here is a crate to wrap the design system components that 
 
 - Uses [Rocket](https://rocket.rs/) as the web framework.
 - Uses [Tera](https://tera.netlify.app/) for server side rendered templating.
+- Uses [Diesel](https://diesel.rs/) as the ORM.
 - Uses [ESBuild](https://esbuild.github.io/) for bundling and minifying JS & CSS and copying images and fonts.
 
 ## Prerequisites
 
 - [Rust & Cargo](https://doc.rust-lang.org/stable/book/ch01-01-installation.html)
 - npm
+- Postgres
 
 ## Install dependencies
 
@@ -21,6 +23,15 @@ What's really missing here is a crate to wrap the design system components that 
 npm install
 npm run build
 cargo build
+cargo install diesel_cli --no-default-features --features postgres
+```
+
+## Setup database
+
+```bash
+cp .env.example .env
+diesel setup
+diesel migration run
 ```
 
 ## Run server
