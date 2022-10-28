@@ -1,4 +1,7 @@
+use crate::schema::users;
+
 use rocket::serde::Serialize;
+use rocket_sync_db_pools::diesel::Insertable;
 
 #[derive(Debug, Serialize)]
 pub struct User {
@@ -7,6 +10,12 @@ pub struct User {
     pub age: u8,
     pub grade: u8,
     pub active: bool,
+}
+
+#[derive(Insertable)]
+#[diesel(table_name = users)]
+pub struct NewUser {
+    pub name: String,
 }
 
 #[derive(FromForm)]
