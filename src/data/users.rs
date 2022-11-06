@@ -9,11 +9,14 @@ lazy_static! {
         map.insert(
             "3e2dd4ae-3c37-40c6-aa64-7061f284ce28",
             User {
-                uuid: String::from("3e2dd4ae-3c37-40c6-aa64-7061f284ce28"),
-                name: String::from("John Doe"),
+                // uuid: String::from("3e2dd4ae-3c37-40c6-aa64-7061f284ce28"),
+                id: 5,
                 age: 18,
-                grade: 1,
-                active: true,
+                name: String::from("John Doe"),
+                email: String::from("john.doe@example.com"),
+                // age: 18,
+                // grade: 1,
+                // active: true,
             },
         );
         map

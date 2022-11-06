@@ -6,6 +6,7 @@ mod models;
 mod routes;
 mod schema;
 
+use dotenvy::dotenv;
 use rocket::fs::{relative, FileServer};
 use rocket::Request;
 use rocket_dyn_templates::{context, Template};
@@ -21,6 +22,8 @@ fn not_found(_req: &Request) -> Template {
 
 #[launch]
 fn rocket() -> _ {
+    dotenv().ok();
+
     rocket::build()
         .attach(Template::fairing())
         .attach(Db::fairing())

@@ -9,7 +9,7 @@ edition = "2021"
 rocket = { git = "https://github.com/SergioBenitez/Rocket.git", branch = "master" }
 rocket_dyn_templates = { git = "https://github.com/SergioBenitez/Rocket.git", branch = "master", features = ["tera"] }
 rocket_sync_db_pools = { git = "https://github.com/SergioBenitez/Rocket.git", branch = "master", features = ["diesel_postgres_pool"] }
-diesel = { version = "2.0.0", features = ["postgres"] }
+diesel = { version = "2.0.2", features = ["postgres"] }
 dotenvy = "0.15"
 serde = "1.0.1"
 lazy_static = "1.4.0"
