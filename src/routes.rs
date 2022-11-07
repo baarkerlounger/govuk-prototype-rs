@@ -5,6 +5,7 @@ use crate::models::user::*;
 use rocket::form::Form;
 use rocket::response::status::Created;
 use rocket::serde::json::Json;
+use rocket::Config;
 use rocket::Route;
 use rocket::{get, post};
 use rocket_dyn_templates::{context, Template};
@@ -45,6 +46,11 @@ async fn users_index(db_conn: Db) -> Template {
 #[post("/users", data = "<data>")]
 async fn user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
     let user = create_user(&db_conn, &data.name, &data.email, &data.age).await;
-    let url = format!("http://localhost:3000/user/{}", user.id);
+    let url = format!(
+        "http://{}:{}/user/{}",
+        Config::ADDRESS,
+        Config::PORT,
+        user.id
+    );
     Created::new(url).body(Json(user))
 }
