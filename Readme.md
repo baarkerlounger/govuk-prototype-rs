@@ -31,7 +31,7 @@ cargo install diesel_cli --no-default-features --features postgres
 ```bash
 cp .env.example .env
 diesel setup
-diesel migration run
+diesel migration run --database-url 'postgres://username:password@localhost/database_name'
 ```
 
 ## Run server
