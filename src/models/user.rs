@@ -34,18 +34,16 @@ pub async fn create_user(db_conn: &Db, name: &str, email: &str, age: &i32) -> Us
         email: String::from(email),
         age: age.clone(),
     };
-    let result = db_conn
+    db_conn
         .run(move |conn| {
             diesel::insert_into(users::table)
                 .values(&new_user)
                 .get_result(&mut *conn)
                 .expect("Error saving new post")
         })
-        .await;
-    result
+        .await
 }
 
 pub async fn all_users(db_conn: &Db) -> Result<Vec<User>, diesel::result::Error> {
-    let result = db_conn.run(move |conn| users::table.load(&mut *conn)).await;
-    result
+    db_conn.run(move |conn| users::table.load(&mut *conn)).await
 }
