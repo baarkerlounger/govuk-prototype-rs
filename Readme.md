@@ -43,10 +43,8 @@ cargo run
 ## Run tests
 
 ```bash
-cargo test -- --test-threads 3
+cargo test
 ```
-
-Note. More than 3 threads causes a default Postgres install on Debian to run out of available connections.
 
 ## Docker
 

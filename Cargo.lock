@@ -563,6 +563,7 @@ dependencies = [
  "diesel",
  "dotenvy",
  "lazy_static",
+ "once_cell",
  "rocket",
  "rocket_dyn_templates",
  "rocket_sync_db_pools",
