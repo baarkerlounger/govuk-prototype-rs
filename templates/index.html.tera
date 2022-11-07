@@ -25,20 +25,6 @@
           </li>
         </ul>
       </p>
-
-      <h2 class="govuk-heading-m">Pages</h2>
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>
-          <a href="/users">Users</a>
-        </li>
-        <li>
-          <a href="/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce28">John Doe</a>
-        </li>
-        <li>
-          <a href="/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce2">Not Found</a>
-        </li>
-      </ul>
     </div>
   </div>
 {% endblock content %}
