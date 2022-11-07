@@ -18,6 +18,9 @@
             Uses <a href="https://tera.netlify.app/">Tera</a> for server side rendered templating.
           </li>
           <li>
+            Uses <a href="https://diesel.rs/o/">Diesel</a> as the ORM.
+          </li>
+          <li>
             Uses <a href="https://esbuild.github.io/">ESBuild</a> for bundling and minifying JS & CSS and copying images and fonts.
           </li>
         </ul>
@@ -27,10 +30,13 @@
 
       <ul class="govuk-list govuk-list--bullet">
         <li>
-          <a href="/user/3e2dd4ae-3c37-40c6-aa64-7061f284ce28">User</a>
+          <a href="/users">Users</a>
         </li>
         <li>
-          <a href="/user/3e2dd4ae-3c37-40c6-aa64-7061f284ce2">Not Found</a>
+          <a href="/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce28">John Doe</a>
+        </li>
+        <li>
+          <a href="/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce2">Not Found</a>
         </li>
       </ul>
     </div>

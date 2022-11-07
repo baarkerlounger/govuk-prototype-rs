@@ -32,7 +32,7 @@ mod test {
     #[test]
     fn user_page() {
         let client = Client::tracked(rocket()).unwrap();
-        let req = client.get("/user/3e2dd4ae-3c37-40c6-aa64-7061f284ce28");
+        let req = client.get("/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce28");
         let response = req.dispatch();
         let expected_content = "John Doe";
         assert_eq!(response.status(), Status::Ok);
@@ -46,7 +46,7 @@ mod test {
     fn create_user() {
         let client = Client::tracked(rocket()).unwrap();
         let req = client
-            .post("/user")
+            .post("/users")
             .header(ContentType::Form)
             .body("name=john%20doe&email=john.doe@example.com&age=28");
         let response = req.dispatch();
