@@ -1,14 +1,16 @@
 use super::Db;
 use crate::data::users::USERS;
-use crate::models::user::{create_user, Filters};
+use crate::models::user::{create_user, Filters, User};
 
 use rocket::form::Form;
+use rocket::response::status::Created;
+use rocket::serde::json::Json;
 use rocket::Route;
 use rocket::{get, post};
 use rocket_dyn_templates::{context, Template};
 
 pub fn routes() -> Vec<Route> {
-    routes![health, start_page, user, post, create_users]
+    routes![health, index, user, post, user_create]
 }
 
 #[get("/health")]
@@ -17,15 +19,16 @@ fn health() -> &'static str {
 }
 
 #[get("/")]
-fn start_page() -> Template {
-    Template::render("start_page", context! {})
+fn index() -> Template {
+    Template::render("index", context! {})
 }
 
 #[route(GET, uri = "/user/<uuid>", rank = 1, format = "text/html")]
 fn user(uuid: &str) -> Template {
     let user = USERS.get(uuid);
+    println!("{:?}", user);
     match user {
-        Some(u) => Template::render("users", context! { user: &u }),
+        Some(u) => Template::render("user", context! { user: &u }),
         None => Template::render("404", context! {}),
     }
 }
@@ -37,7 +40,8 @@ fn post(data: Form<Filters>) -> &'static str {
 }
 
 #[post("/user", data = "<data>")]
-async fn create_users(data: Form<Filters>, db_conn: Db) -> Result<(), ()> {
-    create_user(&db_conn, &data.name, &data.email, &data.age).await;
-    Ok(())
+async fn user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
+    let user = create_user(&db_conn, &data.name, &data.email, &data.age).await;
+    let url = format!("http://localhost:3000/user/{}", user.id);
+    Created::new(url).body(Json(user))
 }

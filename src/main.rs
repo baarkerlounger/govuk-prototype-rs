@@ -35,7 +35,7 @@ fn rocket() -> _ {
 #[cfg(test)]
 mod test {
     use super::rocket;
-    use rocket::http::Status;
+    use rocket::http::{ContentType, Status};
     use rocket::local::blocking::Client;
 
     #[test]
@@ -52,7 +52,7 @@ mod test {
     }
 
     #[test]
-    fn start_page() {
+    fn index() {
         let client = Client::tracked(rocket()).unwrap();
         let req = client.get("/");
         let response = req.dispatch();
@@ -75,6 +75,17 @@ mod test {
             response.into_string().unwrap().contains(expected_content),
             true
         );
+    }
+
+    #[test]
+    fn create_user() {
+        let client = Client::tracked(rocket()).unwrap();
+        let req = client
+            .post("/user")
+            .header(ContentType::Form)
+            .body("name=john%20doe&email=john.doe@example.com&age=28");
+        let response = req.dispatch();
+        assert_eq!(response.status(), Status::Created);
     }
 
     #[test]
