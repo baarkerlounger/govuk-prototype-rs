@@ -1,6 +1,6 @@
 use super::Db;
 use crate::data::users::USERS;
-use crate::models::user::*;
+use crate::models::user::{Filters, User};
 
 use rocket::form::Form;
 use rocket::response::status::Created;
@@ -36,7 +36,7 @@ fn user(uuid: &str) -> Template {
 
 #[get("/users")]
 async fn users_index(db_conn: Db) -> Template {
-    let users = all_users(&db_conn).await;
+    let users = User::all(&db_conn).await;
     match users {
         Ok(users) => Template::render("users/index", context! {users: &users}),
         Err(_e) => Template::render("404", context! {}),
@@ -45,7 +45,7 @@ async fn users_index(db_conn: Db) -> Template {
 
 #[post("/users", data = "<data>")]
 async fn user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
-    let user = create_user(&db_conn, &data.name, &data.email, &data.age).await;
+    let user = User::create(&db_conn, &data.name, &data.email, &data.age).await;
     let url = format!(
         "http://{}:{}/user/{}",
         Config::ADDRESS,

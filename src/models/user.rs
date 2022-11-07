@@ -28,22 +28,24 @@ pub struct Filters {
     pub age: i32,
 }
 
-pub async fn create_user(db_conn: &Db, name: &str, email: &str, age: &i32) -> User {
-    let new_user = NewUser {
-        name: String::from(name),
-        email: String::from(email),
-        age: age.clone(),
-    };
-    db_conn
-        .run(move |conn| {
-            diesel::insert_into(users::table)
-                .values(&new_user)
-                .get_result(&mut *conn)
-                .expect("Error saving new post")
-        })
-        .await
-}
+impl User {
+    pub async fn create(db_conn: &Db, name: &str, email: &str, age: &i32) -> User {
+        let new_user = NewUser {
+            name: String::from(name),
+            email: String::from(email),
+            age: age.clone(),
+        };
+        db_conn
+            .run(move |conn| {
+                diesel::insert_into(users::table)
+                    .values(&new_user)
+                    .get_result(&mut *conn)
+                    .expect("Error saving new post")
+            })
+            .await
+    }
 
-pub async fn all_users(db_conn: &Db) -> Result<Vec<User>, diesel::result::Error> {
-    db_conn.run(move |conn| users::table.load(&mut *conn)).await
+    pub async fn all(db_conn: &Db) -> Result<Vec<User>, diesel::result::Error> {
+        db_conn.run(move |conn| users::table.load(&mut *conn)).await
+    }
 }
