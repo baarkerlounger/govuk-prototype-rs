@@ -1,6 +1,6 @@
 use super::Db;
 use crate::data::users::USERS;
-use crate::models::user::{create_user, Filters, User};
+use crate::models::user::*;
 
 use rocket::form::Form;
 use rocket::response::status::Created;
@@ -10,7 +10,7 @@ use rocket::{get, post};
 use rocket_dyn_templates::{context, Template};
 
 pub fn routes() -> Vec<Route> {
-    routes![health, index, user, post, user_create]
+    routes![health, index, user, post, user_create, users_index]
 }
 
 #[get("/health")]
@@ -28,8 +28,17 @@ fn user(uuid: &str) -> Template {
     let user = USERS.get(uuid);
     println!("{:?}", user);
     match user {
-        Some(u) => Template::render("user", context! { user: &u }),
+        Some(u) => Template::render("users/show", context! { user: &u }),
         None => Template::render("404", context! {}),
+    }
+}
+
+#[get("/users")]
+async fn users_index(db_conn: Db) -> Template {
+    let users = all_users(&db_conn).await;
+    match users {
+        Ok(users) => Template::render("users/index", context! {users: &users}),
+        Err(_e) => Template::render("404", context! {}),
     }
 }
 

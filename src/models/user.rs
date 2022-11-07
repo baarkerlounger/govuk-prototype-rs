@@ -44,3 +44,8 @@ pub async fn create_user(db_conn: &Db, name: &str, email: &str, age: &i32) -> Us
         .await;
     result
 }
+
+pub async fn all_users(db_conn: &Db) -> Result<Vec<User>, diesel::result::Error> {
+    let result = db_conn.run(move |conn| users::table.load(&mut *conn)).await;
+    result
+}

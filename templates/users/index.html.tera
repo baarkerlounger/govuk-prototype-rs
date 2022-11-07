@@ -1,0 +1,14 @@
+{% extends "layout" %}
+
+{% block title %}Users{% endblock title %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">Users</h1>
+      {% for user in users %}
+        <p class="govuk-body">User name is: {{user.name}}, and their age is: {{user.age}}</p>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
