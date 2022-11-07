@@ -54,7 +54,7 @@ Rust + Docker still feels a little rough around the edges. This uses [cargo chef
 
 The final image is built without the rust and node toolchains so we need to copy the compiled and copied front end assets and templates (which are statically linked by cargo) into the image as well as the rust binary.
 
-The final image comes in at 96.7MB.
+The final image comes in at ~100MB.
 
 ```bash
 docker build -t govuk-prototype-rs .
