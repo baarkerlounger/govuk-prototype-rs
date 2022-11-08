@@ -1,0 +1,32 @@
+version: '3.6'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=dbname
+      - DATABASE_USERNAME=postgres_user
+      - DATABASE_PASSWORD=postgres_password
+
+  db:
+    image: postgres:15.0-alpine
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - 5433:5432 # Mapped to 5433 in case Postgres is already running locally on 5432
+    environment:
+      - POSTGRES_PASSWORD=postgres_password
+      - POSTGRES_USER=postgres_user
+      - POSTGRES_DB=dbname
+
+volumes:
+  dbdata:

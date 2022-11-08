@@ -4,8 +4,6 @@ Deployed at https://govuk-prototype-rs.onrender.com/ with Docker.
 
 A small experiment to see how difficult it would be to start building web services using the [GovUK Design System](https://frontend.design-system.service.gov.uk/) in Rust.
 
-What's really missing here is a crate to wrap the design system components that can be kept up to date independently of any service. Similar to https://github.com/DFE-Digital/govuk-components
-
 - Uses [Rocket](https://rocket.rs/) as the web framework.
 - Uses [Tera](https://tera.netlify.app/) for server side rendered templating.
 - Uses [Diesel](https://diesel.rs/) as the ORM.
@@ -56,4 +54,10 @@ The final image comes in at ~100MB.
 ```bash
 docker build -t govuk-prototype-rs .
 docker run -p 8000:8000 --rm --name govuk-prototype-rs-1 govuk-prototype-rs
+```
+
+or, to also run a linked Postgres instance in docker
+
+```bash
+docker-compose up
 ```
