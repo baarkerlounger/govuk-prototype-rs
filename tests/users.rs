@@ -24,6 +24,17 @@ fn create_user() {
         .header(ContentType::Form)
         .body("name=john%20doe&email=john.doe@example.com&age=28");
     let response = req.dispatch();
+    assert_eq!(response.status(), Status::new(303));
+}
+
+#[test]
+fn api_create_user() {
+    let client = test_client().lock().unwrap();
+    let req = client
+        .post("/api/users")
+        .header(ContentType::Form)
+        .body("name=john%20doe&email=john.doe@example.com&age=28");
+    let response = req.dispatch();
     assert_eq!(response.status(), Status::Created);
 }
 

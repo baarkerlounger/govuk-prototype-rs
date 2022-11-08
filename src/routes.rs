@@ -4,14 +4,21 @@ use crate::models::user::{Filters, User};
 
 use rocket::form::Form;
 use rocket::response::status::Created;
+use rocket::response::Redirect;
 use rocket::serde::json::Json;
-use rocket::Config;
-use rocket::Route;
-use rocket::{get, post};
+use rocket::{get, post, Config, Route};
 use rocket_dyn_templates::{context, Template};
 
 pub fn routes() -> Vec<Route> {
-    routes![health, index, user, user_create, users_index, users_new,]
+    routes![
+        health,
+        index,
+        user,
+        user_create,
+        users_index,
+        users_new,
+        api_user_create
+    ]
 }
 
 #[get("/health")]
@@ -49,7 +56,13 @@ async fn users_new() -> Template {
 }
 
 #[post("/users", data = "<data>")]
-async fn user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
+async fn user_create(data: Form<Filters>, db_conn: Db) -> Redirect {
+    User::create(&db_conn, &data.name, &data.email, &data.age).await;
+    Redirect::to(uri!("/users"))
+}
+
+#[post("/api/users", data = "<data>")]
+async fn api_user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
     let user = User::create(&db_conn, &data.name, &data.email, &data.age).await;
     let url = format!(
         "http://{}:{}/user/{}",

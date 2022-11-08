@@ -1,7 +1,7 @@
 {% extends "layout" %}
 
 {% block content %}
-  <form class="new_user" id="new_user" action="/users" accept-charset="UTF-8" method="post" autocomplete="off" enctype="multipart/form-data" />
+  <form class="new_user" id="new_user" action="/users" accept-charset="UTF-8" method="post" autocomplete="off" />
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
 
