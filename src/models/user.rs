@@ -29,11 +29,11 @@ pub struct Filters {
 }
 
 impl User {
-    pub async fn create(db_conn: &Db, name: &str, email: &str, age: &i32) -> User {
+    pub async fn create(db_conn: &Db, name: &str, email: &str, age: i32) -> User {
         let new_user = NewUser {
             name: String::from(name),
             email: String::from(email),
-            age: age.clone(),
+            age: age,
         };
         db_conn
             .run(move |conn| {

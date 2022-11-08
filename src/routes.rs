@@ -55,13 +55,13 @@ async fn users_new() -> Template {
 
 #[post("/users", data = "<data>")]
 async fn user_create(data: Form<Filters>, db_conn: Db) -> Redirect {
-    User::create(&db_conn, &data.name, &data.email, &data.age).await;
+    User::create(&db_conn, &data.name, &data.email, data.age).await;
     Redirect::to(uri!("/users"))
 }
 
 #[post("/api/users", data = "<data>")]
 async fn api_user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>> {
-    let user = User::create(&db_conn, &data.name, &data.email, &data.age).await;
+    let user = User::create(&db_conn, &data.name, &data.email, data.age).await;
     let url = format!(
         "http://{}:{}/user/{}",
         Config::ADDRESS,

@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate rocket;
 
+mod config;
 mod models;
 mod routes;
 mod schema;
@@ -23,7 +24,7 @@ fn not_found(_req: &Request) -> Template {
 pub fn rocket() -> _ {
     dotenv().ok();
 
-    rocket::build()
+    rocket::custom(config::from_env())
         .attach(Template::fairing())
         .attach(Db::fairing())
         .register("/", catchers![not_found])
