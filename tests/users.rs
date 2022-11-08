@@ -6,9 +6,9 @@ use rocket::http::{ContentType, Status};
 #[test]
 fn show_user() {
     let client = test_client().lock().unwrap();
-    let req = client.get("/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce28");
+    let req = client.get("/users/1");
     let response = req.dispatch();
-    let expected_content = "John Doe";
+    let expected_content = "john doe";
     assert_eq!(response.status(), Status::Ok);
     assert_eq!(
         response.into_string().unwrap().contains(expected_content),

@@ -1,5 +1,4 @@
 use super::Db;
-use crate::data::users::USERS;
 use crate::models::user::{Filters, User};
 
 use rocket::form::Form;
@@ -31,13 +30,12 @@ fn index() -> Template {
     Template::render("index", context! {})
 }
 
-#[route(GET, uri = "/users/<uuid>", rank = 1, format = "text/html")]
-fn user(uuid: &str) -> Template {
-    let user = USERS.get(uuid);
-    println!("{:?}", user);
+#[route(GET, uri = "/users/<id>", rank = 1, format = "text/html")]
+async fn user(db_conn: Db, id: i32) -> Template {
+    let user = User::get_by_id(&db_conn, id).await;
     match user {
-        Some(u) => Template::render("users/show", context! { user: &u }),
-        None => Template::render("404", context! {}),
+        Ok(u) => Template::render("users/show", context! { user: &u }),
+        Err(_) => Template::render("404", context! {}),
     }
 }
 

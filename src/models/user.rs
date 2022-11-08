@@ -48,4 +48,10 @@ impl User {
     pub async fn all(db_conn: &Db) -> Result<Vec<User>, diesel::result::Error> {
         db_conn.run(move |conn| users::table.load(&mut *conn)).await
     }
+
+    pub async fn get_by_id(db_conn: &Db, id: i32) -> Result<User, diesel::result::Error> {
+        db_conn
+            .run(move |conn| users::table.find(id).first::<User>(&mut *conn))
+            .await
+    }
 }

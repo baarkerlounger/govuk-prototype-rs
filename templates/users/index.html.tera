@@ -6,9 +6,23 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">Users</h1>
-      {% for user in users %}
-        <p class="govuk-body"><a href="/users/3e2dd4ae-3c37-40c6-aa64-7061f284ce28">{{user.name}}</a></p>
-      {% endfor %}
+      <a draggable="false" data-module="govuk-button" role="button" html="method get" class="govuk-button" href="/users/new">Create a user</a>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header">Email</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for user in users %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell"><p class="govuk-body"><a href="/users/{{user.id}}">{{user.name}}</a></p></td>
+              <td class="govuk-table__cell"><p class="govuk-body">{{user.email}}</p></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 {% endblock content %}
