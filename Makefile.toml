@@ -3,9 +3,16 @@ env_files = [
 ]
 
 [tasks.setup_databases]
+run_task = [{name = "setup_database"}, {name = "setup_test_database"}]
+
+[tasks.setup_database]
 script = [
  "diesel setup --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}",
+ "diesel migration run --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}"
+]
+
+[tasks.setup_test_database]
+script = [
  "diesel setup --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}-test",
- "diesel migration run --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}",
  "diesel migration run --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}-test"
 ]

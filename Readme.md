@@ -30,7 +30,7 @@ cargo install diesel_cli --no-default-features --features postgres
 
 ```bash
 cp .env.example .env
-cargo make setup_database
+cargo make setup_databases
 ```
 
 ## Run server
