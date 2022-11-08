@@ -11,7 +11,7 @@ use rocket::{get, post};
 use rocket_dyn_templates::{context, Template};
 
 pub fn routes() -> Vec<Route> {
-    routes![health, index, user, user_create, users_index]
+    routes![health, index, user, user_create, users_index, users_new,]
 }
 
 #[get("/health")]
@@ -41,6 +41,11 @@ async fn users_index(db_conn: Db) -> Template {
         Ok(users) => Template::render("users/index", context! {users: &users}),
         Err(_e) => Template::render("404", context! {}),
     }
+}
+
+#[get("/users/new")]
+async fn users_new() -> Template {
+    Template::render("users/new", context! {})
 }
 
 #[post("/users", data = "<data>")]

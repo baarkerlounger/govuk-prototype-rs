@@ -40,3 +40,16 @@ fn user_index() {
     assert_eq!(response.status(), Status::Ok);
     assert_eq!(response.into_string().unwrap().contains("testname23"), true);
 }
+
+#[test]
+fn new_user() {
+    let client = test_client().lock().unwrap();
+    let req = client.get("/users/new");
+    let response = req.dispatch();
+    let expected_content = "Create a new user";
+    assert_eq!(response.status(), Status::Ok);
+    assert_eq!(
+        response.into_string().unwrap().contains(expected_content),
+        true
+    );
+}

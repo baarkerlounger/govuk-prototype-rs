@@ -21,7 +21,7 @@ pub struct NewUser {
     pub age: i32,
 }
 
-#[derive(FromForm)]
+#[derive(Debug, FromForm)]
 pub struct Filters {
     pub name: String,
     pub email: String,

@@ -1,0 +1,23 @@
+{% extends "layout" %}
+
+{% block content %}
+  <form class="new_user" id="new_user" action="/users" accept-charset="UTF-8" method="post" autocomplete="off" enctype="multipart/form-data" />
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+
+
+        <h1 class="govuk-heading-l">
+          Create a new user
+        </h1>
+
+        <div class="govuk-form-group"><label for="user-name-field" class="govuk-label govuk-label--m">Name</label><input id="user-name-field" class="govuk-input" autocomplete="name" type="text" name="name" /></div>
+
+        <div class="govuk-form-group"><label for="user-email-field" class="govuk-label govuk-label--m">Email address</label><input id="user-email-field" class="govuk-input" autocomplete="email" spellcheck="false" type="email" value="" name="email" /></div>
+
+        <div class="govuk-form-group"><label for="user-age-field" class="govuk-label govuk-label--m">Age</label><input id="user-age-field" class="govuk-input" autocomplete="age" spellcheck="false" type="numeric" value="" name="age" /></div>
+
+        <button type="submit" formnovalidate="formnovalidate" class="govuk-button" data-module="govuk-button" data-prevent-double-click="true">Create</button>
+      </div>
+    </div>
+  </form>
+{% endblock content %}
