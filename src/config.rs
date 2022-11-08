@@ -17,7 +17,6 @@ pub fn from_env() -> Figment {
         "postgres://{}:{}@{}:{}/{}",
         username, password, host, port, name
     );
-    println!("{:?}", database_url);
     database_config.insert("url", database_url);
     databases.insert("govuk-prototype-rs", database_config);
 
