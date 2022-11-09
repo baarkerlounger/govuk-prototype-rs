@@ -7,6 +7,13 @@ use std::sync::Mutex;
 use temp_env;
 
 #[cfg(test)]
+// Use temp_env to ensure that the database rocket connects to is a dedicated test one rather than
+// the development database.
+
+// Since Cargo tests run in parallel we also create a static instance
+// and wrap it in a mutex to ensure only one test is spinning up a connection pool at a time
+// otherwise each test spins up it's own with ~30 connections and a small/local Postgres instance
+// is quickly swamped.
 pub fn test_client() -> &'static Mutex<Client> {
     dotenv().ok();
     let database_name =

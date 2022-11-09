@@ -4,7 +4,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-xl">
-        Gov UK Design System Prototyping in Rust
+        A rusty diesel powered rocket 🚀
         <span class="govuk-caption-xl"></span>
       </h1>
       <p class="govuk-body">

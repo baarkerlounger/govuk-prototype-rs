@@ -1,0 +1,46 @@
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '18.7.0'
+  DATABASE_HOST: 'localhost'
+  DATABASE_PORT: 5432
+  DATABASE_NAME: govuk_prototype_rs
+  DATABASE_USERNAME: postgres_user
+  DATABASE_PASSWORD: postgres_password
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres_user
+          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_DB: govuk_prototype_rs
+        ports:
+          - 5432:5432
+        options: >-
+          --mount type=tmpfs,destination=/var/lib/postgresql/data
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@main
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Test
+      run: |
+        npm install
+        npm run build --if-present
+        cargo test
