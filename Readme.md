@@ -22,6 +22,7 @@ npm install
 npm run build
 cargo build
 cargo install diesel_cli --no-default-features --features postgres
+cargo install cargo-make
 ```
 
 ## Setup database
