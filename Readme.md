@@ -52,12 +52,5 @@ The final image is built without the rust and node toolchains so we need to copy
 The final image comes in at ~100MB.
 
 ```bash
-docker build -t govuk-prototype-rs .
-docker run -p 8000:8000 --rm --name govuk-prototype-rs-1 govuk-prototype-rs
-```
-
-or, to also run a linked Postgres instance in docker
-
-```bash
-docker-compose up
+docker-compose up --build
 ```
