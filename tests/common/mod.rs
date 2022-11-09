@@ -11,7 +11,7 @@ pub fn test_client() -> &'static Mutex<Client> {
     dotenv().ok();
     let database_name =
         env::var("DATABASE_NAME").expect("No DATABASE_NAME environment variable found");
-    let test_database_name = format!("{}-test", database_name);
+    let test_database_name = format!("{}_test", database_name);
     temp_env::with_var("DATABASE_NAME", Some(test_database_name), || {
         static INSTANCE: OnceCell<Mutex<Client>> = OnceCell::new();
         return INSTANCE.get_or_init(|| {

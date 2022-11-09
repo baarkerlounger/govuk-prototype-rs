@@ -1,7 +1,7 @@
 env_files = [".env"]
 
 [tasks.setup_databases]
-run_task = [{name = "setup_database"}, {name = "setup_test_database"}]
+dependencies = ["setup_database", "setup_test_database"]
 
 [tasks.setup_database]
 script = [
@@ -10,5 +10,5 @@ script = [
 
 [tasks.setup_test_database]
 script = [
- "diesel setup --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}-test"
+ "diesel setup --database-url postgres://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}_test"
 ]

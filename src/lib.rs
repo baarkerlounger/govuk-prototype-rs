@@ -14,7 +14,7 @@ use rocket::{Build, Request, Rocket};
 use rocket_dyn_templates::{context, Template};
 use rocket_sync_db_pools::{database, diesel};
 
-#[database("govuk-prototype-rs")]
+#[database("govuk_prototype_rs")]
 pub struct Db(diesel::PgConnection);
 
 pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!();

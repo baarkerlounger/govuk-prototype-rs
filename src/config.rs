@@ -7,7 +7,7 @@ pub fn from_env() -> Figment {
     let mut database_config = HashMap::new();
     let mut databases = HashMap::new();
     database_config.insert("url", database_url());
-    databases.insert("govuk-prototype-rs", database_config);
+    databases.insert("govuk_prototype_rs", database_config);
 
     Config::figment().merge(("databases", databases))
 }
