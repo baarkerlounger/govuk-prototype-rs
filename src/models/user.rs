@@ -1,10 +1,10 @@
 use crate::schema::users;
 
 use crate::Db;
-use rocket::serde::Serialize;
+use rocket::serde::{Deserialize, Serialize};
 use rocket_sync_db_pools::diesel::prelude::*;
 
-#[derive(Debug, Serialize, Queryable)]
+#[derive(Debug, Deserialize, Serialize, Queryable)]
 #[diesel(table_name = users)]
 pub struct User {
     pub id: i32,
@@ -42,6 +42,13 @@ impl User {
                     .get_result(&mut *conn)
                     .expect("Error saving new post")
             })
+            .await
+    }
+
+    pub async fn delete(db_conn: &Db, user_id: i32) -> Result<usize, diesel::result::Error> {
+        use crate::schema::users::dsl::*;
+        db_conn
+            .run(move |conn| diesel::delete(users.filter(id.eq(user_id))).execute(conn))
             .await
     }
 

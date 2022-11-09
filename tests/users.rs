@@ -1,7 +1,9 @@
 mod common;
 
 use common::*;
+use govuk_prototype_rs::models::user::User;
 use rocket::http::{ContentType, Status};
+use serde_json;
 
 #[test]
 fn show_user() {
@@ -63,4 +65,19 @@ fn new_user() {
         response.into_string().unwrap().contains(expected_content),
         true
     );
+}
+
+#[test]
+fn delete_user() {
+    let client = test_client().lock().unwrap();
+    let req = client
+        .post("/api/users")
+        .header(ContentType::Form)
+        .body("name=john%20doe&email=john.doe@example.com&age=28");
+    let response = req.dispatch();
+    let response_string = response.into_string().unwrap();
+    let user: User = serde_json::from_str(&response_string).unwrap();
+    let req = client.delete(format!("/users/{}", user.id));
+    let response = req.dispatch();
+    assert_eq!(response.status(), Status::new(303));
 }

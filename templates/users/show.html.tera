@@ -9,6 +9,14 @@
 
       <p class="govuk-body">Email: {{user.email}}</p>
       <p class="govuk-body">Age: {{user.age}}</p>
+
+      <form action = "/users/{{user.id}}" method = "post">
+        <input type="hidden" name="_method" value="delete" />
+        <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">
+          Delete user
+        </button>
+      </form>
+
     </div>
   </div>
 {% endblock content %}

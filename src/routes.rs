@@ -16,7 +16,8 @@ pub fn routes() -> Vec<Route> {
         user_create,
         users_index,
         users_new,
-        api_user_create
+        api_user_create,
+        delete_user
     ]
 }
 
@@ -69,4 +70,13 @@ async fn api_user_create(data: Form<Filters>, db_conn: Db) -> Created<Json<User>
         user.id
     );
     Created::new(url).body(Json(user))
+}
+
+#[delete("/users/<id>")]
+async fn delete_user(db_conn: Db, id: i32) -> Redirect {
+    let res = User::delete(&db_conn, id).await;
+    match res {
+        Ok(_t) => Redirect::to(uri!("/users")),
+        Err(_e) => Redirect::to(uri!("/users")),
+    }
 }
