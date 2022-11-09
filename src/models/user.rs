@@ -52,7 +52,13 @@ impl User {
             .await
     }
 
-    pub async fn update(db_conn: &Db, uid: i32, uname: &str, uemail: &str, uage: i32) -> Result<User, diesel::result::Error> {
+    pub async fn update(
+        db_conn: &Db,
+        uid: i32,
+        uname: &str,
+        uemail: &str,
+        uage: i32,
+    ) -> Result<User, diesel::result::Error> {
         use crate::schema::users::dsl::*;
 
         let user_id = uid;

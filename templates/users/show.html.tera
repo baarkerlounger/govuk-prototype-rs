@@ -10,14 +10,16 @@
       <p class="govuk-body">Email: {{user.email}}</p>
       <p class="govuk-body">Age: {{user.age}}</p>
 
-      <a draggable="false" data-module="govuk-button" role="button" html="method get" class="govuk-button" href="/users/{{user.id}}/edit">Edit</a>
+      <div class="govuk-button-group">
+        <a draggable="false" data-module="govuk-button" role="button" html="method get" class="govuk-button" href="/users/{{user.id}}/edit">Edit</a>
 
-      <form action = "/users/{{user.id}}" method = "post">
-        <input type="hidden" name="_method" value="delete" />
-        <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">
-          Delete user
-        </button>
-      </form>
+        <form action = "/users/{{user.id}}" method = "post">
+          <input type="hidden" name="_method" value="delete" />
+          <button type="submit" class="govuk-button govuk-button--warning" data-module="govuk-button">
+            Delete user
+          </button>
+        </form>
+      </div>
 
     </div>
   </div>
