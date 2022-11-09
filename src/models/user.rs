@@ -40,7 +40,7 @@ impl User {
                 diesel::insert_into(users::table)
                     .values(&new_user)
                     .get_result(&mut *conn)
-                    .expect("Error saving new post")
+                    .expect("Error saving new user")
             })
             .await
     }
@@ -49,6 +49,23 @@ impl User {
         use crate::schema::users::dsl::*;
         db_conn
             .run(move |conn| diesel::delete(users.filter(id.eq(user_id))).execute(conn))
+            .await
+    }
+
+    pub async fn update(db_conn: &Db, uid: i32, uname: &str, uemail: &str, uage: i32) -> Result<User, diesel::result::Error> {
+        use crate::schema::users::dsl::*;
+
+        let user_id = uid;
+        let user_name = String::from(uname);
+        let user_email = String::from(uemail);
+        let user_age = uage;
+
+        db_conn
+            .run(move |conn| {
+                diesel::update(users.filter(id.eq(&user_id)))
+                    .set((name.eq(user_name), email.eq(user_email), age.eq(user_age)))
+                    .get_result(&mut *conn)
+            })
             .await
     }
 

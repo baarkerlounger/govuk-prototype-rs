@@ -81,3 +81,36 @@ fn delete_user() {
     let response = req.dispatch();
     assert_eq!(response.status(), Status::new(303));
 }
+
+#[test]
+fn edit_and_update_user() {
+    let client = test_client().lock().unwrap();
+    let req = client
+        .post("/api/users")
+        .header(ContentType::Form)
+        .body("name=john%20doe&email=john.doe@example.com&age=28");
+    let response = req.dispatch();
+    let response_string = response.into_string().unwrap();
+    let user: User = serde_json::from_str(&response_string).unwrap();
+    let req = client.get(format!("/users/{}/edit", user.id));
+    let response = req.dispatch();
+    assert_eq!(
+        response
+            .into_string()
+            .unwrap()
+            .contains("john.doe@example.com"),
+        true
+    );
+    let req = client
+        .put(format!("/users/{}", user.id))
+        .header(ContentType::Form)
+        .body("name=mary%20jane&email=different@example.com&age=35");
+    let response = req.dispatch();
+    assert_eq!(
+        response
+            .into_string()
+            .unwrap()
+            .contains("different@example.com"),
+        true
+    );
+}

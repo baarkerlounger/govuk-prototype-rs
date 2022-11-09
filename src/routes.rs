@@ -17,7 +17,9 @@ pub fn routes() -> Vec<Route> {
         users_index,
         users_new,
         api_user_create,
-        delete_user
+        delete_user,
+        edit_user,
+        update_user
     ]
 }
 
@@ -78,5 +80,23 @@ async fn delete_user(db_conn: Db, id: i32) -> Redirect {
     match res {
         Ok(_t) => Redirect::to(uri!("/users")),
         Err(_e) => Redirect::to(uri!("/users")),
+    }
+}
+
+#[put("/users/<id>", data = "<data>")]
+async fn update_user(db_conn: Db, id: i32, data: Form<Filters>) -> Template {
+    let user = User::update(&db_conn, id, &data.name, &data.email, data.age).await;
+    match user {
+        Ok(user) => Template::render("users/show", context! {user: &user}),
+        Err(_e) => Template::render("404", context! {}),
+    }
+}
+
+#[get("/users/<id>/edit")]
+async fn edit_user(db_conn: Db, id: i32) -> Template {
+    let user = User::get_by_id(&db_conn, id).await;
+    match user {
+        Ok(u) => Template::render("users/edit", context! { user: &u }),
+        Err(_) => Template::render("404", context! {}),
     }
 }
