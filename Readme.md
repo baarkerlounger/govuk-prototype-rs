@@ -66,7 +66,6 @@ docker-compose up --build
 
 - A way to safely run integration tests in transactions
 - A way to seed data (for test or other databases)
-- A way to access the database connection handler in test cases directly to enable using queries as part of test assertions
 - Any form of authentication
 - Request verification/Authenticity tokens
 

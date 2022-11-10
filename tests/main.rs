@@ -1,6 +1,7 @@
-mod common;
+// Pub to avoid dead code warning: https://github.com/rust-lang/rust/issues/46379
+pub mod common;
 
-use common::*;
+use common::test_client;
 use rocket::http::Status;
 
 #[test]
