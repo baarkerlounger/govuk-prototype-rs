@@ -2,6 +2,7 @@ mod common;
 
 use common::test_client;
 use govuk_prototype_rs::models::user::User;
+use govuk_prototype_rs::schema::users::dsl::*;
 use govuk_prototype_rs::Db;
 use rocket::http::{ContentType, Status};
 use rocket::tokio::runtime;
@@ -23,7 +24,6 @@ fn show_user() {
 
 #[test]
 fn create_user() {
-    use govuk_prototype_rs::schema::users::dsl::*;
     let rt = runtime::Builder::new_multi_thread()
         .enable_all()
         .build()
@@ -98,9 +98,26 @@ fn delete_user() {
     let response = req.dispatch();
     let response_string = response.into_string().unwrap();
     let user: User = serde_json::from_str(&response_string).unwrap();
+    let rt = runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+    let original_count: i64 = rt.block_on(async {
+        let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
+        db_conn
+            .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
+            .await
+    });
     let req = client.delete(format!("/users/{}", user.id));
     let response = req.dispatch();
+    let new_count: i64 = rt.block_on(async {
+        let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
+        db_conn
+            .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
+            .await
+    });
     assert_eq!(response.status(), Status::new(303));
+    assert_eq!(new_count, original_count - 1);
 }
 
 #[test]
