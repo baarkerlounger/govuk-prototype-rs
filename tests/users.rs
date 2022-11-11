@@ -1,10 +1,10 @@
 mod common;
 
-use common::{async_test_client, test_client};
+use common::test_client;
 use govuk_prototype_rs::models::user::User;
 use govuk_prototype_rs::Db;
-use rocket::async_test;
 use rocket::http::{ContentType, Status};
+use rocket::tokio::runtime;
 use rocket_sync_db_pools::diesel::prelude::*;
 use serde_json;
 
@@ -21,23 +21,31 @@ fn show_user() {
     );
 }
 
-#[async_test]
-async fn create_user() {
+#[test]
+fn create_user() {
     use govuk_prototype_rs::schema::users::dsl::*;
-
-    let client = async_test_client().await.lock().unwrap();
-    let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
-    let original_count: i64 = db_conn
-        .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
-        .await;
+    let rt = runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+    let client = test_client().lock().unwrap();
+    let original_count: i64 = rt.block_on(async {
+        let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
+        db_conn
+            .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
+            .await
+    });
     let req = client
         .post("/users")
         .header(ContentType::Form)
         .body("name=john%20doe&email=john.doe@example.com&age=28");
-    let response = req.dispatch().await;
-    let new_count: i64 = db_conn
-        .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
-        .await;
+    let response = req.dispatch();
+    let new_count: i64 = rt.block_on(async {
+        let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
+        db_conn
+            .run(move |conn| users.count().get_result(&mut *conn).expect("Error"))
+            .await
+    });
     assert_eq!(response.status(), Status::new(303));
     assert_eq!(new_count, original_count + 1);
 }

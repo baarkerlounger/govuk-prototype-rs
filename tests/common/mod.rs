@@ -1,8 +1,6 @@
 use dotenvy::dotenv;
-use futures::executor::block_on;
 use govuk_prototype_rs;
 use once_cell::sync::OnceCell;
-use rocket::local::asynchronous::Client as AsyncClient;
 use rocket::local::blocking::Client;
 use std::env;
 use std::sync::Mutex;
@@ -28,29 +26,9 @@ pub fn test_client() -> &'static Mutex<Client> {
 }
 
 #[cfg(test)]
-pub async fn async_test_client() -> &'static Mutex<AsyncClient> {
-    temp_env::with_var("DATABASE_NAME", Some(test_database_name()), || {
-        static ASYNC_INSTANCE: OnceCell<Mutex<AsyncClient>> = OnceCell::new();
-        return ASYNC_INSTANCE.get_or_init(|| {
-            block_on(async {
-                Mutex::from(
-                    AsyncClient::untracked(govuk_prototype_rs::rocket())
-                        .await
-                        .expect("valid rocket instance"),
-                )
-            })
-        });
-    })
-}
-
-#[cfg(test)]
 fn test_database_name() -> String {
     dotenv().ok();
     let database_name =
         env::var("DATABASE_NAME").expect("No DATABASE_NAME environment variable found");
-    if database_name.contains("_test") {
-        database_name
-    } else {
-        format!("{}_test", database_name)
-    }
+    format!("{}_test", database_name)
 }
