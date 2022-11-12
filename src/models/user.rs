@@ -1,8 +1,11 @@
+use crate::notify::NotifyClient;
 use crate::schema::users;
-
 use crate::Db;
+use reqwest;
 use rocket::serde::{Deserialize, Serialize};
 use rocket_sync_db_pools::diesel::prelude::*;
+use serde_json::{Map, Value};
+use std::env;
 
 #[derive(Debug, Deserialize, Serialize, Queryable)]
 #[diesel(table_name = users)]
@@ -83,5 +86,45 @@ impl User {
         db_conn
             .run(move |conn| users::table.find(id).first::<User>(&mut *conn))
             .await
+    }
+
+    pub async fn notify(&self) -> Result<reqwest::Response, reqwest::Error> {
+        let api_key = env::var("GOVUK_NOTIFY_API_KEY").expect("No Notify API Key found");
+        let notify_client = NotifyClient::new(api_key);
+        let template_id = String::from("217a419e-6a7d-482a-9596-718b889dffce");
+        let mut personalisation = Map::new();
+        let mut personalisation_values = Map::new();
+        personalisation_values.insert(
+            "variables".to_string(),
+            Value::String("some value".to_string()),
+        );
+        personalisation.insert(
+            "personalisation".to_string(),
+            Value::Object(personalisation_values),
+        );
+
+        notify_client
+            .send_email(&self.email, template_id, personalisation)
+            .await
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use dotenvy::dotenv;
+    use rocket::async_test;
+
+    #[async_test]
+    async fn notify() {
+        dotenv().ok();
+        let user = User {
+            id: 5,
+            name: String::from("John Doe"),
+            email: String::from("john.doe@example.com"),
+            age: 32,
+        };
+        let response = user.notify().await.unwrap();
+        assert_eq!(response.status(), 201);
     }
 }
