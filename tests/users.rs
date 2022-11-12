@@ -1,6 +1,6 @@
 mod common;
 
-use common::test_client;
+use common::{setup_database, test_client};
 use govuk_prototype_rs::models::user::User;
 use govuk_prototype_rs::schema::users::dsl::*;
 use govuk_prototype_rs::Db;
@@ -11,7 +11,27 @@ use serde_json;
 
 #[test]
 fn show_user() {
+    setup_database();
     let client = test_client().lock().unwrap();
+    let rt = runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+    rt.block_on(async {
+        let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
+        db_conn
+            .run(move |conn| {
+                diesel::insert_into(users)
+                    .values((
+                        &name.eq("john doe"),
+                        &email.eq("john.doe@example.com"),
+                        &age.eq(15),
+                    ))
+                    .execute(&mut *conn)
+                    .expect("success")
+            })
+            .await
+    });
     let req = client.get("/users/1");
     let response = req.dispatch();
     let expected_content = "john doe";
@@ -63,6 +83,7 @@ fn api_create_user() {
 
 #[test]
 fn user_index() {
+    setup_database();
     let client = test_client().lock().unwrap();
     client
         .post("/users")

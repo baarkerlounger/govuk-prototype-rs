@@ -1,10 +1,10 @@
 #[macro_use]
 extern crate rocket;
 
-mod config;
+pub mod config;
 pub mod models;
-mod routes;
 pub mod schema;
+mod routes;
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use dotenvy::dotenv;

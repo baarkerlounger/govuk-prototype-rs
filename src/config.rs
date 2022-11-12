@@ -12,7 +12,7 @@ pub fn from_env() -> Figment {
     Config::figment().merge(("databases", databases))
 }
 
-fn database_url() -> String {
+pub fn database_url() -> String {
     let host = env::var("DATABASE_HOST").expect("No DATABASE_HOST environment variable found");
     let name = env::var("DATABASE_NAME").expect("No DATABASE_NAME environment variable found");
     let port = env::var("DATABASE_PORT").expect("No DATABASE_PORT environment variable found");
