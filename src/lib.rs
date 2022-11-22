@@ -3,7 +3,6 @@ extern crate rocket;
 
 pub mod config;
 pub mod models;
-mod notify;
 mod routes;
 pub mod schema;
 

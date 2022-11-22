@@ -1,6 +1,5 @@
 use dotenvy::dotenv;
 use govuk_prototype_rs;
-use govuk_prototype_rs::config;
 use once_cell::sync::OnceCell;
 use rocket::local::blocking::Client;
 use std::env;
@@ -29,10 +28,9 @@ pub fn test_client() -> &'static Mutex<Client> {
 #[cfg(test)]
 pub fn setup_database() {
     let dbname = test_database_name();
-    let url = temp_env::with_var("DATABASE_NAME", Some(&dbname), || config::database_url());
     std::process::Command::new("psql")
         .args([
-            url.clone(),
+            database_name().clone(),
             "--command".to_string(),
             format!("DROP DATABASE {}", dbname).to_string(),
             "--command".to_string(),
@@ -40,6 +38,11 @@ pub fn setup_database() {
         ])
         .output()
         .expect("Failed to create test database");
+}
+
+#[cfg(test)]
+fn database_name() -> String {
+    env::var("DATABASE_NAME").expect("No DATABASE_NAME environment variable found")
 }
 
 #[cfg(test)]

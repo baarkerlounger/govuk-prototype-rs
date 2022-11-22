@@ -64,7 +64,7 @@ docker-compose up --build
 
 ## Not yet implemented
 
-- A way to safely run integration tests in transactions
+- A way to safely run integration tests in transactions (the current approach of dropping the database and recreating when needed is slow, and brittle - it silently fails if the database has an open connection to another program)
 - A way to seed data (for test or other databases)
 - Any form of authentication
 - Request verification/Authenticity tokens

@@ -1,6 +1,6 @@
-use crate::notify::NotifyClient;
 use crate::schema::users;
 use crate::Db;
+use govuk_notify::NotifyClient;
 use reqwest;
 use rocket::serde::{Deserialize, Serialize};
 use rocket_sync_db_pools::diesel::prelude::*;
@@ -104,7 +104,7 @@ impl User {
         );
 
         notify_client
-            .send_email(&self.email, template_id, personalisation)
+            .send_email(self.email.clone(), template_id, Some(personalisation))
             .await
     }
 }

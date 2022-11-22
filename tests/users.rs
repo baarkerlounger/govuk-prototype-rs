@@ -17,7 +17,7 @@ fn show_user() {
         .enable_all()
         .build()
         .unwrap();
-    rt.block_on(async {
+    let user: User = rt.block_on(async {
         let db_conn = Db::get_one(&*client.rocket()).await.unwrap();
         db_conn
             .run(move |conn| {
@@ -27,12 +27,12 @@ fn show_user() {
                         &email.eq("john.doe@example.com"),
                         &age.eq(15),
                     ))
-                    .execute(&mut *conn)
+                    .get_result(&mut *conn)
                     .expect("success")
             })
             .await
     });
-    let req = client.get("/users/1");
+    let req = client.get(format!("/users/{}", user.id));
     let response = req.dispatch();
     let expected_content = "john doe";
     assert_eq!(response.status(), Status::Ok);
