@@ -93,18 +93,13 @@ impl User {
         let notify_client = NotifyClient::new(api_key);
         let template_id = String::from("217a419e-6a7d-482a-9596-718b889dffce");
         let mut personalisation = Map::new();
-        let mut personalisation_values = Map::new();
-        personalisation_values.insert(
+        personalisation.insert(
             "variables".to_string(),
             Value::String("some value".to_string()),
         );
-        personalisation.insert(
-            "personalisation".to_string(),
-            Value::Object(personalisation_values),
-        );
 
         notify_client
-            .send_email(self.email.clone(), template_id, Some(personalisation))
+            .send_email(self.email.clone(), template_id, Some(personalisation), None)
             .await
     }
 }
