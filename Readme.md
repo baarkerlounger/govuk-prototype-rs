@@ -59,7 +59,15 @@ Rust + Docker still feels a little rough around the edges. This uses [cargo chef
 The final image is built without the rust and node toolchains so we need to copy the compiled and copied front end assets and templates (which are statically linked by cargo) into the image as well as the rust binary.
 
 ```bash
-docker-compose up --build
+docker build -t govuk-prototype-rs .
+```
+
+Running tests or dev server using docker-compose:
+
+```bash
+docker-compose build
+docker compose run --rm app cargo test
+docker-compose run --rm app cargo run
 ```
 
 ## Not yet implemented

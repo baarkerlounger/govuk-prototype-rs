@@ -1,0 +1,24 @@
+FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
+
+WORKDIR app
+
+FROM chef AS planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
+
+FROM chef AS builder
+COPY --from=planner /app/recipe.json recipe.json
+# Build dependencies - this is the caching Docker layer!
+RUN cargo chef cook --release --recipe-path recipe.json
+RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt install -y nodejs
+COPY package.json package-lock.json esbuild.js ./
+COPY assets ./assets/
+RUN npm install --frozen-lockfile
+RUN npm run build
+# Build application
+COPY . .
+RUN cargo build
+
+ENV ROCKET_ADDRESS=0.0.0.0
+EXPOSE 3000
