@@ -1,6 +1,6 @@
 {
-  "name": "gobuk-prototype-rs",
-  "version": "1.0.0",
+  "name": "govuk-prototype-rs",
+  "version": "0.1.0",
   "description": "GOVUK Design Project Template",
   "main": "esbuild.js",
   "dependencies": {
@@ -14,6 +14,6 @@
   "scripts": {
     "build": "node esbuild.js"
   },
-  "author": "Daniel Baark",
+  "author": "baarkerlounger",
   "license": "MIT"
 }
